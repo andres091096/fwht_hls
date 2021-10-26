@@ -4,6 +4,7 @@
 # Compiled Object files
 *.slo
 *.lo
+*.log
 *.o
 *.obj
 
@@ -30,3 +31,4 @@
 *.exe
 *.out
 *.app
+*.rpt
