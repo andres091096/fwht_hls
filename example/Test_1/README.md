@@ -1,84 +1,14 @@
-# Fast Hadamard Transform 
+# Parallelization levels experiment
 
-This is a HLS implementation of the fas Hadamard transformation.
+In this experiment, we compare six different parallelization levels in the same data. We implement these architectures using the two versions of PEs so, the [Butterfly_1](./Butterfly_1) folder implements the six architectures using PE version 1 and the [Butterfly_2](./Butterfly_2) folder implements the six architecture using PE version 2. 
 
-### *N = 1024 (n=10)*
+Inside each Butterfly folder, we find six folders (case_*), the case_0 correspond to a parallelization level 0, the case_1 folder implement the parallelization level 1, and so on until the case_5 folder that implements the parallelization level 5. 
 
-##### *`K >> 1`* 
+To run the experiment inside each case folder run the command 
 
-> *(case #2)*
+```bash
+make synthesize
+```
 
+This command produces a .rpt file that reports the latency and the resource usage 
 
-$$
-\delta_{(1)}\mu_{(2)}B\mu_{(2)}^{-1}\mu_{(1)}BR_{(1)}\mu_{(1)}^{-1}\phi_{(1)}\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(1,2)}^{-1}
-$$
-##### *`K >> 3`* 
-
-> *(case #1)*
-
-
-$$
-\delta_{(2)}\mu_{(2)}BR_{(2)}\mu_{(3)}^{-1}\cdots\mu_{(1)}BR_{(1)}\mu_{(1)}^{-1}\phi_{(3)}\cdots\phi_{(1)}\mu_{(3)}R_{(3)}B\mu_{(3)}^{-1}\cdots\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(3,6)}^{-1}
-$$
-
-##### *`K >> 3, l >> 2`* 
-
-> *(case #1)*
-
-
-$$
-\delta_{(2)}\mu_{(2)}BR_{(2)}\mu_{(3)}^{-1}\cdots\mu_{(1)}BR_{(1)}\mu_{(1)}^{-1}\phi_{(3)}\cdots\phi_{(1)}\mu_{(3)}R_{(3)}B\mu_{(3)}^{-1}\cdots\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(3,6)}^{-1}
-$$
-
-##### *`K >> 6`* 
-
-> *(case #3)*
-
-
-$$
-\delta_{(5)}\mu_{(3)}BR_{(5)}\mu_{(3)}^{-1}\cdots\mu_{(1)}BR_{(3)}\mu_{(1)}^{-1}\phi_{(3,2)}\cdots\phi_{(1,2)}\mu_{(3)}R_{(5)}B\mu_{(3)}^{-1}\cdots\mu_{(1)}R_{(3)}B\mu_{(1)}^{-1}T_{(2,3)}\mu_{(2)}B\mu_{(2)}^{-1}\cdots\mu_{(1)}B\mu_{(1)}^{-1}\mu_{(3,5)}^{-1}\mu_{(3,8)}^{-1}
-$$
-
-
-
-
-
-
-$$
-\mu_{(3)}R_{(5)}B\mu_{(3)}^{-1}\cdots\mu_{(1)}R_{(3)}B\mu_{(1)}^{-1}T_{(2,3)}\mu_{(2)}B\mu_{(2)}^{-1}\cdots\mu_{(1)}B\mu_{(1)}^{-1}
-$$
-
-$$
-\mu_{(3)}R_{(5)}B\mu_{(3)}^{-1}\mu_{(2)}R_{(4)}BR_{(2)}\mu_{(2)}^{-1}\mu_{(1)}R_{(3)}BR_{(1)}\mu_{(1)}^{-1}\phi_{(2)}\phi_{(1)}\mu_{(2)}R_{(2)}B\mu_{(2)}^{-1}\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}
-$$
-
-$$
-\delta_{(5)}\mu_{(3)}BR_{(5)}\mu_{(3)}^{-1}\cdots\mu_{(1)}BR_{(3)}\mu_{(1)}^{-1}\phi_{(3,2)}\cdots\phi_{(1,2)}\mu_{(3)}R_{(5)}B\mu_{(3)}^{-1}\mu_{(2)}R_{(4)}BR_{(2)}\mu_{(2)}^{-1}\mu_{(1)}R_{(3)}BR_{(1)}\mu_{(1)}^{-1}\phi_{(2)}\phi_{(1)}\mu_{(2)}R_{(2)}B\mu_{(2)}^{-1}\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(3,5)}^{-1}\mu_{(3,8)}^{-1}
-$$
-
-$$
-\begin{align*}
-&\delta_{(5)}\mu_{(3)}BR_{(5)}\mu_{(3)}^{-1}\mu_{(2)}BR_{(4)}\mu_{(2)}^{-1}\mu_{(1)}BR_{(3)}\mu_{(1)}^{-1}\phi_{(3,2)}\phi_{(2,2)}\phi_{(1,2)}\mu_{(3)}R_{(5)}B\mu_{(3)}^{-1}\mu_{(2)}R_{(4)}BR_{(2)}\mu_{(2)}^{-1}\mu_{(1)}R_{(3)}BR_{(1)}\mu_{(1)}^{-1}\\
-&\phi_{(2)}\phi_{(1)}\mu_{(2)}R_{(2)}B\mu_{(2)}^{-1}\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(3,5)}^{-1}\mu_{(3,8)}^{-1}
-\end{align*}
-$$
-
-
-
-How to implement:
-$$
-\phi_{(1,2)}[x,y] = [x,[(y_3\oplus x_1)y_2y_1]]
-$$
-
-$$
-\begin{align*}
-&\delta_{(5)}\mu_{(3)}BR_{(5)}\mu_{(3)}^{-1}\mu_{(2)}BR_{(4)}\mu_{(2)}^{-1}\mu_{(1)}BR_{(3)}\mu_{(1)}^{-1}\phi_{(1,2)}\mu_{(3)}R_{(5)}B\mu_{(3)}^{-1}\mu_{(2)}R_{(4)}BR_{(2)}\mu_{(2)}^{-1}\mu_{(1)}R_{(3)}BR_{(1)}\mu_{(1)}^{-1}\\
-&\phi_{(2)}\phi_{(1)}\mu_{(2)}R_{(2)}B\mu_{(2)}^{-1}\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(3,5)}^{-1}\mu_{(3,8)}^{-1}
-\end{align*}
-$$
-
-$$
-\mu_{(3,5)}^{-1}[x,y] = [[x_3y_3y_2y_1x_2x_1],[y_5y_4]]
-$$
-
-We pass from 32 rows to 4 rows. 

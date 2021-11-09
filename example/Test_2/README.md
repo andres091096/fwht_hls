@@ -1,72 +1,14 @@
-# Fast Hadamard Transform 
+# Data length experiment
 
-This is a HLS implementation of the fas Hadamard transformation.
+In this experiment, we evaluate architectures with parallelization level of 1, changing the length of the data. We implement these architectures using the second version of the PEs,  so all the architecture are inside the [Butterfly_2](./Butterfly_2) folder. 
 
-*n = 64, K = 3*
+The Butterfly folder, contains 8 foldes (*length_*) that implement each architecture, the number afther the *_* symbol represent the data length that this architecture implements 
 
+To run the experiment inside each *length* folder run the command 
 
-$$
-\delta_{(3)}\mu_{(3)}BR_{(3)}\mu_{(3)}^{-1}\cdots\mu_{(1)}BR_{(1)}\mu_{(1)}^{-1}\phi_{(3)}\cdots\phi_{(1)}\mu_{(3)}R_{(3)}B\mu_{(3)}^{-1}\cdots\mu_{(1)}R_{(1)}B\mu_{(1)}^{-1}\mu_{(3,6)}^{-1}
-$$
-Latency: 206 cycles
+```bash
+make synthesize
+```
 
-| Name  | BRAM_18K | DSP  | FF    | LUT   | URAM |
-| ----- | -------- | ---- | ----- | ----- | ---- |
-| Total | 66       | 192  | 37815 | 45050 | 0    |
-
-###### Pipeline solution
-
-Latency: 902 cycles
-
-| Name  | BRAM_18K | DSP  | FF   | LUT  | URAM |
-| ----- | -------- | ---- | ---- | ---- | ---- |
-| Total | 20       | 22   | 5516 | 6928 | 0    |
-
-### *N = 256*
-
-*n = 8, K = 4*
-
-###### Pipeline solution:
-
-Latency: 4102 cycles
-
-| Name  | BRAM_18K | DSP  | FF   | LUT  | URAM |
-| ----- | -------- | ---- | ---- | ---- | ---- |
-| Total | 24       | 30   | 7164 | 8859 | 0    |
-
-###### Parallel-Pipeline solution:
-
-Latency: 659 cycles
-
-### *N = 1024*
-
-###### Pipeline solution: 
-
-Latency: 18438 cycles
-
-| Name  | BRAM_18K | DSP  | FF   | LUT   | URAM |
-| ----- | -------- | ---- | ---- | ----- | ---- |
-| Total | 28       | 38   | 8844 | 10813 | 0    |
-
-###### Parallel-Pipeline solution:
-
-*n = 10, K = 5*
-
-Latency : 2364 cycles
-
-| Name  | BRAM_18K | DSP  | FF   | LUT   | URAM |
-| ----- | -------- | ---- | ---- | ----- | ---- |
-| Total | 28       | 38   | 8844 | 10813 | 0    |
-
-### *N = 4096*
-
-*n = 12, K = 6*
-
-###### Pipeline solution: 
-
-Latency: 81926 cycles
-
-| Name  | BRAM_18K | DSP  | FF    | LUT   | URAM |
-| ----- | -------- | ---- | ----- | ----- | ---- |
-| Total | 34       | 46   | 10556 | 12783 |      |
+This command produces a .rpt file that reports the latency and the resource usage 
 
